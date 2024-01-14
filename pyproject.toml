@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "test-bot"
+version = "0.1.0"
+description = ""
+authors = ["Egor Nikitin <eganik5674@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+aiogram = "^3.3.0"
+environs = "^10.2.0"
+pymongo = "^4.6.1"
+flake8 = "^7.0.0"
+black = "^23.12.1"
+isort = "^5.13.2"
+
+[tool.black]
+line-length = 119
+exclude = '''
+(
+  /(
+      \.eggs
+    | \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    )/
+
+)
+'''
+
+[tool.isort]
+line_length = 119
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
