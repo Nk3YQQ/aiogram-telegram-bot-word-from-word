@@ -1,4 +1,0 @@
-HOST_ID=mongodb://localhost:27017
-DB_NAME=word_from_word
-PLAYERS_COLLECTION=players_scores
-WORDS_COLLECTION=words
