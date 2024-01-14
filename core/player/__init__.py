@@ -6,9 +6,7 @@ class Player:
 
     def __init__(self, name: str) -> None:
         self.name = name
-        self.user_words = []
-        self._player_states = {}
-        self._player_info = {}
+        self.user_words: list = []
 
     def count_user_words(self) -> int:
         """
