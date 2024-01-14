@@ -3,6 +3,7 @@ from aiogram.types import KeyboardButton, Message, ReplyKeyboardMarkup
 from core.connector import MongoConnector
 from core.database import Database
 from core.game import Game
+from core.session import Session
 
 
 def create_game(database: Database) -> Game:
@@ -33,15 +34,25 @@ def create_database(host_id: str, db_name: str, collection_name: str) -> Databas
     return Database(connection=con, db_name=db_name, collection_name=collection_name)
 
 
+async def create_session(message: Message, player_info: dict, player_states: dict, game: Game,
+                         menu_bottoms: ReplyKeyboardMarkup = None):
+    """
+    Функция создаёт сессию для пользователя
+    """
+    session = Session(message, player_info, player_states)
+    if not session.check_player():
+        await session.add_player(game, menu_bottoms)
+
+
 async def check_player_word(
-    message: Message,
-    database: Database,
-    menu_bottoms: ReplyKeyboardMarkup,
-    player_words: list,
-    player_name: str,
-    user_game: Game,
-    player_states: dict,
-    game: Game,
+        message: Message,
+        database: Database,
+        menu_bottoms: ReplyKeyboardMarkup,
+        player_words: list,
+        player_name: str,
+        user_game: Game,
+        player_states: dict,
+        game: Game,
 ) -> None:
     """
     Функция для проверки введённых пользователем слов
