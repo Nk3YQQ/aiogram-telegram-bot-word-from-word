@@ -1,18 +1,8 @@
 from aiogram.types import Message
 
-from core.session import Session
-from core.settings import db_settings
-from core.utils.for_handler import check_player_word, create_database, create_game, create_panel
-
-MENU_BOTTOMS = create_panel("Начать игру", "Помощь", "Максимальный результат")
-GAME_BOTTOMS = create_panel("Стоп")
-PLAYER_DATABASE = create_database(
-    host_id=db_settings.host_id, db_name=db_settings.db_name, collection_name=db_settings.players_collection
-)
-
-WORD_DATABASE = create_database(
-    host_id=db_settings.host_id, db_name=db_settings.db_name, collection_name=db_settings.words_collection
-)
+from core.settings.bottoms import GAME_BOTTOMS, MENU_BOTTOMS
+from core.settings.database import PLAYER_DATABASE, WORD_DATABASE
+from core.utils.for_handler import check_player_word, create_session, create_game
 
 
 class GameHandler:
@@ -37,20 +27,15 @@ class GameHandler:
         """
         Метод создаёт интерфейс меню
         """
-        session = Session(message, self._player_info, self._player_states)
         game = create_game(database=WORD_DATABASE)
-        if not session.check_player():
-            await session.add_player(game, MENU_BOTTOMS)
+        await create_session(message, self._player_info, self._player_states, game, MENU_BOTTOMS)
 
     async def run(self, message: Message):
         """
         Метод запускает игру для пользователя
         """
-        session = Session(message, self._player_info, self._player_states)
         game = create_game(database=WORD_DATABASE)
-        if not session.check_player():
-            await session.add_player(game, MENU_BOTTOMS)
-
+        await create_session(message, self._player_info, self._player_states, game, MENU_BOTTOMS)
         user_game = self._player_states[message.from_user.id]
         await message.answer(str(user_game.word_info), reply_markup=GAME_BOTTOMS)
 
@@ -58,11 +43,8 @@ class GameHandler:
         """
         Метод проверяет слова пользователя
         """
-        session = Session(message, self._player_info, self._player_states)
         game = create_game(database=WORD_DATABASE)
-        if not session.check_player():
-            await session.add_player(game)
-
+        await create_session(message, self._player_info, self._player_states, game)
         user_game = self._player_states[message.from_user.id]
         player_name = message.from_user.username
         player_words = self._player_info[player_name]
