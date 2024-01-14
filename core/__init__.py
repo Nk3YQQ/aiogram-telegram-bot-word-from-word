@@ -4,11 +4,14 @@ from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command
 
 from core.handler import GameHandler
-from core.settings import settings
+from core.settings import bot_settings
 
 
 async def start():
-    bot = Bot(token=settings.bots.bot_token)
+    """
+    Функция включает бота
+    """
+    bot = Bot(token=bot_settings.bots.bot_token)
     game = GameHandler()
     dp = Dispatcher()
 
