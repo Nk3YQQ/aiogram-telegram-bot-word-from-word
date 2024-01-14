@@ -22,7 +22,7 @@ class Database:
     def get_max_result(self, player_name):
         current_player = list(self._collection.find({"name": player_name}))
         if not current_player:
-            return 'Упс. Похоже Вы ещё не сыграли ни одно игры :('
+            return "Упс. Похоже Вы ещё не сыграли ни одно игры :("
         return max(current_player[0]["score"])
 
     def get_words(self):
